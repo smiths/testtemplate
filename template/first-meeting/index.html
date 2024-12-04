@@ -1486,7 +1486,9 @@ These can be informal/non-academic sources like online articles and videos just 
 We should not spend too much time on this as more specific questions will be asked later.</p>
 </div>
 <h4 id="if-i-were-to-understand-more-about-the-problem-domain-what-keyword-should-i-search-for">If I were to understand more about the problem domain, what keyword should I search for?<a class="headerlink" href="#if-i-were-to-understand-more-about-the-problem-domain-what-keyword-should-i-search-for" title="Permanent link">&para;</a></h4>
+<p>Ballistics, 6 dof ballistics models, point mass ballistic model, Hornady (https://www.hornady.com/), ballistic computer (https://shooterscalculator.com/ballistic-trajectory-chart.php) (https://www.federalpremium.com/ballistics-calculator), ballistic coefficient g1 and g7</p>
 <h4 id="is-there-any-literature-review-general-overview-paper-or-book-chapter-that-you-would-recommend">Is there any literature review, general overview paper or book chapter that you would recommend?<a class="headerlink" href="#is-there-any-literature-review-general-overview-paper-or-book-chapter-that-you-would-recommend" title="Permanent link">&para;</a></h4>
+<p>Phil's paper, Carlucci - Book - Ballistics Theory and Design of Guns and Ammunition</p>
 <h2 id="software-goals">Software Goals<a class="headerlink" href="#software-goals" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
@@ -1541,12 +1543,17 @@ It could already be included in the previous suggested readings.</p>
 <blockquote>
 <p>Note that this is purely a discussion of the theoretical models structure, and not yet about software implementation</p>
 </blockquote>
+<p>Chapter 6 - introductory concepts has the necessary force and moment equations.  These are the ones we are going to use.  Chapter 6 also discusses assumptions.</p>
+<p>Chapter 8.5 - 6dof, Equation 8.219 and 8.220</p>
 <h4 id="are-there-any-variations-different-forms-of-these-equations-that-i-should-be-aware-of">Are there any variations (different forms) of these equations that I should be aware of?<a class="headerlink" href="#are-there-any-variations-different-forms-of-these-equations-that-i-should-be-aware-of" title="Permanent link">&para;</a></h4>
+<p>Later in the chapter 8 they normalize some of the coefficients.  Don't bother.</p>
 <h4 id="for-your-own-research-or-our-software-implementation-are-there-any-modification-to-the-equations-from-the-original-literature">For your own research or our software implementation, are there any modification to the equations from the original literature?<a class="headerlink" href="#for-your-own-research-or-our-software-implementation-are-there-any-modification-to-the-equations-from-the-original-literature" title="Permanent link">&para;</a></h4>
+<p>Phil's paper adds something - aerodynamic jump - better if there, but doesn't hurt if it's not</p>
 <h4 id="are-there-any-simpler-better-understood-models-perhaps-less-accurate-models-to-the-same-problem">Are there any simpler, better-understood models, perhaps less accurate models to the same problem?<a class="headerlink" href="#are-there-any-simpler-better-understood-models-perhaps-less-accurate-models-to-the-same-problem" title="Permanent link">&para;</a></h4>
 <blockquote>
 <p>We can potentially use them for testing purposes.</p>
 </blockquote>
+<p>Simple point mass projectile. Well understood.</p>
 <h2 id="scale-of-the-problem">Scale of the Problem<a class="headerlink" href="#scale-of-the-problem" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
@@ -1586,16 +1593,19 @@ If there is "educated guess" involved, that could influence their research.</p>
 - If so, is the user responsible to provide these for their specific use case, or should we include them in the software?
 - If we were to include them in the software, where do we get these data from? Are they from any literature, your own experiments, etc.?</p>
 </blockquote>
+<p>Environment (temperature, air density, etc.)</p>
 <h4 id="ideally-what-should-the-user-provide-as-inputs">Ideally, what should the user provide as inputs?<a class="headerlink" href="#ideally-what-should-the-user-provide-as-inputs" title="Permanent link">&para;</a></h4>
+<p>Initial condition of the projectile (speed, velocity vectors, spin, initial orientation vector)</p>
 <h4 id="realistically-what-can-we-currently-expect-the-user-to-be-able-to-provide-as-inputs">Realistically, what can we currently expect the user to be able to provide as inputs?<a class="headerlink" href="#realistically-what-can-we-currently-expect-the-user-to-be-able-to-provide-as-inputs" title="Permanent link">&para;</a></h4>
 <blockquote>
 <p>If they have difficulty providing some inputs, what should we do (e.g. default values, derive from other inputs, etc.)?</p>
 <ul>
 <li>How does solution quality degrade if some inputs are not provided (if this is known)?</li>
-<li>If the method to treat missing input is non-trivial, we should ask for examples, literatures, or even treat them a separate theoretical model.
-    \end{itemize}</li>
+<li>If the method to treat missing input is non-trivial, we should ask for examples, literatures, or even treat them a separate theoretical model.</li>
 </ul>
 </blockquote>
+<p>Velocity vectors and spin are easy to obtain. Initial orientation vector is a lot harder.  (If cannot find orientation, assume it is along the velocity axis, )</p>
+<p>Aerodynamic coefficients are difficult to find.  Air drag coefficient is relatively easy (why simple point mass is used)</p>
 <h4 id="what-does-the-user-expect-as-output-from-the-software">What does the user expect as output from the software?<a class="headerlink" href="#what-does-the-user-expect-as-output-from-the-software" title="Permanent link">&para;</a></h4>
 <blockquote>
 <p>Does the user want any additional information like accuracy, intermediate results or metrics, etc.?</p>
@@ -1610,16 +1620,21 @@ If these are non-trivial steps, we should again ask for examples, literatures, o
 <blockquote>
 <p>It will be even better if expected output can also be provided, but this mostly likely will not be the case, except some very simple/degenerate special cases.</p>
 </blockquote>
-<h4 id="are-you-aware-of-any-pseudooracles-that-we-can-use-for-testing">Are you aware of any (pseudo)oracles that we can use for testing?<a class="headerlink" href="#are-you-aware-of-any-pseudooracles-that-we-can-use-for-testing" title="Permanent link">&para;</a></h4>
+<h4 id="are-you-aware-of-any-pseudo-oracles-that-we-can-use-for-testing">Are you aware of any (pseudo) oracles that we can use for testing?<a class="headerlink" href="#are-you-aware-of-any-pseudo-oracles-that-we-can-use-for-testing" title="Permanent link">&para;</a></h4>
 <blockquote>
 <p>These can be...  </p>
+</blockquote>
+<p>No oracle for the 6dof, but many oracles for the simple point mass.  The ballistics calculators are an example.</p>
+<blockquote>
 <ul>
 <li>Known to work implementations. If not on our main model of interest, perhaps on a simpler model that you mentioned earlier.</li>
 <li>Analytical solutions, if they exist, even on a simpler model.</li>
 <li>Experimental data that we can adapt into input/output pairs.</li>
 </ul>
 </blockquote>
+<p>There are experimental papers with data for validation.</p>
 <h4 id="what-are-some-general-trends-or-patterns-we-can-expect-from-the-model-given-different-inputs">What are some general trends or patterns we can expect from the model given different inputs?<a class="headerlink" href="#what-are-some-general-trends-or-patterns-we-can-expect-from-the-model-given-different-inputs" title="Permanent link">&para;</a></h4>
+<p>If you lower the initial velocity (close to sonic, or subsonic), should see that the solution is less stable (will oscillate).  If the spin rate decreases, you will also see it destabilize.</p>
 <h4 id="if-other-models-are-provided-how-do-you-expect-the-results-to-differ-in-certain-special-cases">If other models are provided, how do you expect the results to differ in certain special cases?<a class="headerlink" href="#if-other-models-are-provided-how-do-you-expect-the-results-to-differ-in-certain-special-cases" title="Permanent link">&para;</a></h4>
 <h4 id="are-there-any-simpledegeneratespecial-cases-that-we-can-use-to-test-the-software">Are there any simple/degenerate/special cases that we can use to test the software?<a class="headerlink" href="#are-there-any-simpledegeneratespecial-cases-that-we-can-use-to-test-the-software" title="Permanent link">&para;</a></h4>
 <h2 id="finishing-remarks">Finishing Remarks<a class="headerlink" href="#finishing-remarks" title="Permanent link">&para;</a></h2>
