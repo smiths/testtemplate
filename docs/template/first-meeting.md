@@ -28,8 +28,11 @@ This page is informal and will eventually be hidden along with the `Template Gui
     We should not spend too much time on this as more specific questions will be asked later.
 #### If I were to understand more about the problem domain, what keyword should I search for?
 
+Ballistics, 6 dof ballistics models, point mass ballistic model, Hornady (https://www.hornady.com/), ballistic computer (https://shooterscalculator.com/ballistic-trajectory-chart.php) (https://www.federalpremium.com/ballistics-calculator), ballistic coefficient g1 and g7
+
 #### Is there any literature review, general overview paper or book chapter that you would recommend?
 
+Phil's paper, Carlucci - Book - Ballistics Theory and Design of Guns and Ammunition
 
 ## Software Goals
 
@@ -81,12 +84,22 @@ Typical parallel and sequential calculation
 ///  
 > Note that this is purely a discussion of the theoretical models structure, and not yet about software implementation
 
+Chapter 6 - introductory concepts has the necessary force and moment equations.  These are the ones we are going to use.  Chapter 6 also discusses assumptions.
+
+Chapter 8.5 - 6dof, Equation 8.219 and 8.220
+
 #### Are there any variations (different forms) of these equations that I should be aware of?
+
+Later in the chapter 8 they normalize some of the coefficients.  Don't bother.
 
 #### For your own research or our software implementation, are there any modification to the equations from the original literature?
 
+Phil's paper adds something - aerodynamic jump - better if there, but doesn't hurt if it's not
+
 #### Are there any simpler, better-understood models, perhaps less accurate models to the same problem? 
 > We can potentially use them for testing purposes.
+
+Simple point mass projectile. Well understood.
 
 ## Scale of the Problem
 
@@ -123,14 +136,22 @@ Typical parallel and sequential calculation
 > - If so, is the user responsible to provide these for their specific use case, or should we include them in the software?
 > - If we were to include them in the software, where do we get these data from? Are they from any literature, your own experiments, etc.?
 
+Environment (temperature, air density, etc.)
+
 #### Ideally, what should the user provide as inputs?
+
+Initial condition of the projectile (speed, velocity vectors, spin, initial orientation vector)
 
 #### Realistically, what can we currently expect the user to be able to provide as inputs? 
 > If they have difficulty providing some inputs, what should we do (e.g. default values, derive from other inputs, etc.)?
 
 > - How does solution quality degrade if some inputs are not provided (if this is known)?
 > - If the method to treat missing input is non-trivial, we should ask for examples, literatures, or even treat them a separate theoretical model.
-    \end{itemize}
+    
+Velocity vectors and spin are easy to obtain. Initial orientation vector is a lot harder.  (If cannot find orientation, assume it is along the velocity axis, )
+
+Aerodynamic coefficients are difficult to find.  Air drag coefficient is relatively easy (why simple point mass is used)
+
 #### What does the user expect as output from the software? 
 > Does the user want any additional information like accuracy, intermediate results or metrics, etc.?
 
@@ -142,14 +163,21 @@ Typical parallel and sequential calculation
 #### If you were to use the software in your research, what would you give as typical inputs (or input ranges)?
 > It will be even better if expected output can also be provided, but this mostly likely will not be the case, except some very simple/degenerate special cases.
 
-#### Are you aware of any (pseudo)oracles that we can use for testing?
+
+#### Are you aware of any (pseudo) oracles that we can use for testing?
 > These can be...  
+
+No oracle for the 6dof, but many oracles for the simple point mass.  The ballistics calculators are an example.
 
 > -  Known to work implementations. If not on our main model of interest, perhaps on a simpler model that you mentioned earlier.
 > -  Analytical solutions, if they exist, even on a simpler model.
 > -  Experimental data that we can adapt into input/output pairs.
 
+There are experimental papers with data for validation.
+
 #### What are some general trends or patterns we can expect from the model given different inputs?
+
+If you lower the initial velocity (close to sonic, or subsonic), should see that the solution is less stable (will oscillate).  If the spin rate decreases, you will also see it destabilize.
 
 #### If other models are provided, how do you expect the results to differ in certain special cases?
 
